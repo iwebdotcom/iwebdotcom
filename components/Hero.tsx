@@ -16,7 +16,8 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-white/60"
+        className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/[0.10] text-sm text-white/55"
+        style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(10px)" }}
       >
         <span className="w-2 h-2 rounded-full bg-[#CC0000] animate-pulse" />
         Digital Agency · Portugal

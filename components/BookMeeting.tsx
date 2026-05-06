@@ -1,22 +1,33 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { InlineWidget } from "react-calendly";
+import Cal, { getCalApi } from "@calcom/embed-react";
 
 export default function BookMeeting() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
+  useEffect(() => {
+    (async () => {
+      const cal = await getCalApi({ namespace: "iwebdotcom" });
+      cal("ui", {
+        theme: "dark",
+        hideEventTypeDetails: false,
+        layout: "month_view",
+      });
+    })();
+  }, []);
+
   return (
     <section id="booking" className="relative z-10 py-24 px-4 overflow-hidden">
-      {/* Extra red glow behind this section */}
+      {/* Extra red glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(204,0,0,0.18) 0%, transparent 65%)",
+            "radial-gradient(ellipse at 50% 50%, rgba(204,0,0,0.15) 0%, transparent 65%)",
         }}
       />
 
@@ -39,23 +50,19 @@ export default function BookMeeting() {
           </p>
         </motion.div>
 
-        {/* Calendly widget */}
+        {/* Cal.com embed */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="glass-card overflow-hidden rounded-2xl"
+          style={{ minHeight: 600 }}
         >
-          <InlineWidget
-            url="https://calendly.com/iwebdotcom"
-            styles={{ height: "700px", minWidth: "320px" }}
-            pageSettings={{
-              backgroundColor: "000000",
-              hideEventTypeDetails: false,
-              hideLandingPageDetails: false,
-              primaryColor: "CC0000",
-              textColor: "ffffff",
-            }}
+          <Cal
+            namespace="iwebdotcom"
+            calLink="iwebdotcom"
+            style={{ width: "100%", height: "100%", minHeight: 600, overflow: "scroll" }}
+            config={{ layout: "month_view" }}
           />
         </motion.div>
 

@@ -7,7 +7,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
+    const handler = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
@@ -20,32 +20,41 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-4 left-1/2 z-50 -translate-x-1/2"
+      transition={{ duration: 0.7, ease: "easeOut" }}
+      className="fixed top-5 left-1/2 z-50 -translate-x-1/2 w-max"
     >
       <div
-        className={`flex items-center gap-6 px-6 py-3 rounded-full border transition-all duration-300 ${
+        className={`flex items-center gap-2 px-4 py-2.5 rounded-full border transition-all duration-500 ${
           scrolled
-            ? "bg-black/70 border-white/15 shadow-[0_0_30px_rgba(204,0,0,0.15)]"
-            : "bg-black/40 border-white/10"
+            ? "border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.04)]"
+            : "border-white/[0.05]"
         }`}
-        style={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
+        style={{
+          background: scrolled
+            ? "rgba(0,0,0,0.45)"
+            : "rgba(0,0,0,0.15)",
+          backdropFilter: "blur(24px) saturate(180%)",
+          WebkitBackdropFilter: "blur(24px) saturate(180%)",
+        }}
       >
         {/* Logo */}
         <button
           onClick={() => scrollTo("hero")}
-          className="flex items-center gap-2 mr-2 group"
+          className="flex items-center gap-1.5 px-2 py-0.5"
         >
-          <span className="text-[#CC0000] font-bold text-lg tracking-tight font-mono">
+          <span className="text-[#CC0000] font-bold text-base tracking-tight font-mono leading-none">
             &lt;i·&gt;
           </span>
-          <span className="font-bold text-white text-sm tracking-wide">
+          <span className="font-semibold text-white text-sm tracking-wide">
             iWebDotCom
           </span>
         </button>
 
-        {/* Nav links — hidden on mobile */}
-        <div className="hidden md:flex items-center gap-1">
+        {/* Separator */}
+        <div className="hidden md:block w-px h-4 bg-white/10 mx-1" />
+
+        {/* Nav links */}
+        <div className="hidden md:flex items-center gap-0.5">
           {[
             { label: "Services", id: "services" },
             { label: "Work", id: "testimonials" },
@@ -55,17 +64,20 @@ export default function Navbar() {
             <button
               key={item.label}
               onClick={() => scrollTo(item.id)}
-              className="px-4 py-1.5 text-sm text-white/70 hover:text-white rounded-full hover:bg-white/5 transition-all duration-200"
+              className="px-3.5 py-1.5 text-sm text-white/60 hover:text-white rounded-full hover:bg-white/[0.06] transition-all duration-200"
             >
               {item.label}
             </button>
           ))}
         </div>
 
+        {/* Separator */}
+        <div className="hidden md:block w-px h-4 bg-white/10 mx-1" />
+
         {/* CTA */}
         <button
           onClick={() => scrollTo("booking")}
-          className="ml-2 px-5 py-2 text-sm font-semibold rounded-full btn-red whitespace-nowrap"
+          className="btn-red px-4 py-2 text-sm whitespace-nowrap"
         >
           Book a Meeting
         </button>

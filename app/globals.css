@@ -25,33 +25,22 @@ body {
   overflow-x: hidden;
 }
 
-/* Orb keyframe animations */
-@keyframes drift1 {
-  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
-  25%       { transform: translate(80px, 60px) rotate(90deg); }
-  50%       { transform: translate(100px, -40px) rotate(180deg); }
-  75%       { transform: translate(-60px, 80px) rotate(270deg); }
+/* ── Light beam animations (upgraide.ai style) ── */
+@keyframes beamSway1 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-38deg); opacity: 0.80; }
+  33%       { transform: translate(-50%, -50%) rotate(-24deg); opacity: 0.60; }
+  66%       { transform: translate(-50%, -50%) rotate(-42deg); opacity: 0.70; }
+}
+@keyframes beamSway2 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(26deg);  opacity: 0.65; }
+  50%       { transform: translate(-50%, -50%) rotate(12deg);  opacity: 0.45; }
+}
+@keyframes beamSway3 {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-10deg); opacity: 0.45; }
+  50%       { transform: translate(-50%, -50%) rotate(-28deg); opacity: 0.30; }
 }
 
-@keyframes drift2 {
-  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
-  25%       { transform: translate(-100px, -80px) rotate(-90deg); }
-  50%       { transform: translate(-60px, 60px) rotate(-180deg); }
-  75%       { transform: translate(80px, -100px) rotate(-270deg); }
-}
-
-@keyframes drift3 {
-  0%, 100% { transform: translate(0px, 0px); }
-  33%       { transform: translate(-80px, 60px); }
-  66%       { transform: translate(60px, -80px); }
-}
-
-@keyframes drift4 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  50%       { transform: translate(60px, -60px) scale(1.1); }
-}
-
-/* Marquee */
+/* ── Marquee ── */
 @keyframes marquee {
   0%   { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -62,71 +51,66 @@ body {
   width: max-content;
   animation: marquee 30s linear infinite;
 }
-
 .marquee-track:hover {
   animation-play-state: paused;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #000;
-}
-::-webkit-scrollbar-thumb {
-  background: #CC0000;
-  border-radius: 3px;
-}
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #CC0000; border-radius: 3px; }
 
-/* Selection */
-::selection {
-  background: rgba(204, 0, 0, 0.3);
-  color: #fff;
-}
+/* ── Selection ── */
+::selection { background: rgba(204, 0, 0, 0.3); color: #fff; }
 
-/* Glass card */
+/* ── Glass card ── */
 .glass-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
-
 .glass-card:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(204, 0, 0, 0.4);
-  box-shadow: 0 0 30px rgba(204, 0, 0, 0.15);
+  border-color: rgba(204, 0, 0, 0.35);
+  box-shadow: 0 0 35px rgba(204, 0, 0, 0.12);
 }
 
-/* Red glow button */
+/* ── Buttons — glass style ── */
 .btn-red {
-  background: linear-gradient(135deg, #CC0000, #8B0000);
+  background: rgba(180, 0, 0, 0.55);
+  border: 1px solid rgba(220, 20, 60, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #fff;
   border-radius: 9999px;
   padding: 0.75rem 2rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+  box-shadow: 0 0 18px rgba(204, 0, 0, 0.30), inset 0 1px 0 rgba(255,255,255,0.08);
 }
-
 .btn-red:hover {
-  box-shadow: 0 0 40px rgba(204, 0, 0, 0.6);
+  background: rgba(204, 0, 0, 0.70);
+  box-shadow: 0 0 36px rgba(204, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.12);
   transform: translateY(-1px);
 }
 
 .btn-outline {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: rgba(255,255,255,0.85);
   border-radius: 9999px;
   padding: 0.75rem 2rem;
   font-weight: 600;
   transition: all 0.3s ease;
 }
-
 .btn-outline:hover {
-  border-color: #CC0000;
-  box-shadow: 0 0 20px rgba(204, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(204, 0, 0, 0.50);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(204, 0, 0, 0.18);
 }
