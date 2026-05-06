@@ -77,7 +77,7 @@ export default function Navbar() {
         {/* CTA */}
         <button
           onClick={() => scrollTo("booking")}
-          className="btn-red px-4 py-2 text-sm whitespace-nowrap"
+          className="btn-white px-5 py-2 text-sm whitespace-nowrap"
         >
           Book a Meeting
         </button>
