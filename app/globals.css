@@ -20,32 +20,24 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   BEAM KEYFRAMES
+   AURORA BLOB KEYFRAMES
+   Large diffuse blobs that slowly drift —
+   same technique as upgraide.ai (CSS + blur)
 ═══════════════════════════════════════════ */
-@keyframes beamSway1 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(-38deg); }
-  33%       { transform: translate(-50%, -50%) rotate(-22deg); }
-  66%       { transform: translate(-50%, -50%) rotate(-44deg); }
+@keyframes aurora1 {
+  0%, 100% { transform: translate(-50%,-50%) scale(1)    translateY(0px)    rotate(0deg);   }
+  25%       { transform: translate(-50%,-50%) scale(1.08) translateY(-70px)  rotate(4deg);   }
+  50%       { transform: translate(-50%,-50%) scale(0.95) translateY(50px)   rotate(-3deg);  }
+  75%       { transform: translate(-50%,-50%) scale(1.04) translateY(-30px)  rotate(2deg);   }
 }
-@keyframes beamSway2 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(28deg);  }
-  50%       { transform: translate(-50%, -50%) rotate(13deg);  }
+@keyframes aurora2 {
+  0%, 100% { transform: translate(-50%,-50%) scale(1)    translateY(0px)    rotate(0deg);   }
+  33%       { transform: translate(-50%,-50%) scale(1.10) translateY(80px)   rotate(-5deg);  }
+  66%       { transform: translate(-50%,-50%) scale(0.92) translateY(-60px)  rotate(3deg);   }
 }
-@keyframes beamSway3 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(-8deg);  }
-  50%       { transform: translate(-50%, -50%) rotate(-25deg); }
-}
-
-/* ═══════════════════════════════════════════
-   BEAM CSS CLASSES
-   Two layers per beam: wide glow + bright core
-═══════════════════════════════════════════ */
-.beam {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  pointer-events: none;
-  will-change: transform;
+@keyframes aurora3 {
+  0%, 100% { transform: translate(-50%,-50%) scale(1)    translateX(0px);   }
+  50%       { transform: translate(-50%,-50%) scale(1.06) translateX(-80px); }
 }
 
 /* Beam 1 — main diagonal, top-right → bottom-left */
