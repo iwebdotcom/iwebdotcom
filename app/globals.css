@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --red-vivid: #CC0000;
+  --red-crimson: #DC143C;
+  --red-dark: #8B0000;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Orb keyframe animations */
+@keyframes drift1 {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  25%       { transform: translate(80px, 60px) rotate(90deg); }
+  50%       { transform: translate(100px, -40px) rotate(180deg); }
+  75%       { transform: translate(-60px, 80px) rotate(270deg); }
+}
+
+@keyframes drift2 {
+  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+  25%       { transform: translate(-100px, -80px) rotate(-90deg); }
+  50%       { transform: translate(-60px, 60px) rotate(-180deg); }
+  75%       { transform: translate(80px, -100px) rotate(-270deg); }
+}
+
+@keyframes drift3 {
+  0%, 100% { transform: translate(0px, 0px); }
+  33%       { transform: translate(-80px, 60px); }
+  66%       { transform: translate(60px, -80px); }
+}
+
+@keyframes drift4 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50%       { transform: translate(60px, -60px) scale(1.1); }
+}
+
+/* Marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #CC0000;
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(204, 0, 0, 0.3);
+  color: #fff;
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 1rem;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(204, 0, 0, 0.4);
+  box-shadow: 0 0 30px rgba(204, 0, 0, 0.15);
+}
+
+/* Red glow button */
+.btn-red {
+  background: linear-gradient(135deg, #CC0000, #8B0000);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+}
+
+.btn-red:hover {
+  box-shadow: 0 0 40px rgba(204, 0, 0, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  border-color: #CC0000;
+  box-shadow: 0 0 20px rgba(204, 0, 0, 0.2);
+}
