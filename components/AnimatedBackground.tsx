@@ -3,88 +3,60 @@
 import { useEffect, useRef } from "react";
 
 interface Wave {
-  y: number;         // center Y (0–1 fraction of height)
-  amplitude: number; // wave height (0–1 fraction of height)
-  frequency: number; // cycles across screen width
+  y: number;         // centre Y (0–1 fraction of height)
+  amplitude: number; // height of wave (0–1 fraction of height)
+  frequency: number; // sine cycles across screen (low = fat curves)
   phase: number;     // initial phase offset
-  speed: number;     // phase increment per frame
+  speed: number;     // phase increment per frame (small = slow)
   r: number;
   g: number;
   b: number;
 }
 
+// Fat, slow aurora waves — like upgraide.ai but in red
 const WAVES: Wave[] = [
-  { y: 0.38, amplitude: 0.20, frequency: 1.1, phase: 0.0, speed: 0.014, r: 220, g: 20,  b: 60  },
-  { y: 0.62, amplitude: 0.24, frequency: 0.8, phase: 1.9, speed: 0.009, r: 204, g: 0,   b: 0   },
-  { y: 0.22, amplitude: 0.13, frequency: 1.4, phase: 0.9, speed: 0.018, r: 200, g: 35,  b: 35  },
-  { y: 0.76, amplitude: 0.17, frequency: 0.9, phase: 3.3, speed: 0.007, r: 160, g: 0,   b: 20  },
+  { y: 0.44, amplitude: 0.32, frequency: 0.45, phase: 0.0, speed: 0.004, r: 220, g: 5,  b: 5  },
+  { y: 0.65, amplitude: 0.28, frequency: 0.38, phase: 1.9, speed: 0.003, r: 200, g: 0,  b: 0  },
+  { y: 0.26, amplitude: 0.22, frequency: 0.55, phase: 3.1, speed: 0.005, r: 180, g: 0,  b: 8  },
 ];
 
-function buildPath(
-  ctx: CanvasRenderingContext2D,
-  wave: Wave,
-  w: number,
-  h: number,
-  tick: number
-) {
-  const steps = 280;
-  ctx.beginPath();
-  for (let i = 0; i <= steps; i++) {
-    const x = (i / steps) * w;
+// 6 stacked layers per wave: very wide+faint → thin+bright
+// "lighter" compositing makes colours add up naturally on black
+const LAYERS = [
+  { lw: 700, a: 0.055 },
+  { lw: 350, a: 0.090 },
+  { lw: 160, a: 0.150 },
+  { lw: 60,  a: 0.300 },
+  { lw: 18,  a: 0.600 },
+  { lw: 3.5, a: 0.920 },
+];
+
+function buildPoints(wave: Wave, w: number, h: number, tick: number) {
+  const STEPS = 120;
+  const pts: [number, number][] = [];
+  for (let i = 0; i <= STEPS; i++) {
+    const x = (i / STEPS) * w;
     const t =
-      (i / steps) * Math.PI * 2 * wave.frequency +
+      (i / STEPS) * Math.PI * 2 * wave.frequency +
       wave.phase +
       tick * wave.speed;
-    const y = wave.y * h + Math.sin(t) * wave.amplitude * h;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+    pts.push([x, wave.y * h + Math.sin(t) * wave.amplitude * h]);
   }
+  return pts;
 }
 
-function drawWave(
+function tracePath(
   ctx: CanvasRenderingContext2D,
-  wave: Wave,
-  w: number,
-  h: number,
-  tick: number
+  pts: [number, number][]
 ) {
-  const { r, g, b } = wave;
-
-  // Layer 1 — very wide outer glow
-  ctx.save();
-  buildPath(ctx, wave, w, h, tick);
-  ctx.strokeStyle = `rgba(${r},${g},${b},0.06)`;
-  ctx.lineWidth = 70;
-  ctx.lineJoin = "round";
-  ctx.stroke();
-  ctx.restore();
-
-  // Layer 2 — medium glow
-  ctx.save();
-  buildPath(ctx, wave, w, h, tick);
-  ctx.strokeStyle = `rgba(${r},${g},${b},0.16)`;
-  ctx.lineWidth = 28;
-  ctx.lineJoin = "round";
-  ctx.stroke();
-  ctx.restore();
-
-  // Layer 3 — inner glow
-  ctx.save();
-  buildPath(ctx, wave, w, h, tick);
-  ctx.strokeStyle = `rgba(${r},${g},${b},0.40)`;
-  ctx.lineWidth = 9;
-  ctx.lineJoin = "round";
-  ctx.stroke();
-  ctx.restore();
-
-  // Layer 4 — bright core
-  ctx.save();
-  buildPath(ctx, wave, w, h, tick);
-  ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`;
-  ctx.lineWidth = 2.5;
-  ctx.lineJoin = "round";
-  ctx.stroke();
-  ctx.restore();
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length - 1; i++) {
+    const mx = (pts[i][0] + pts[i + 1][0]) * 0.5;
+    const my = (pts[i][1] + pts[i + 1][1]) * 0.5;
+    ctx.quadraticCurveTo(pts[i][0], pts[i][1], mx, my);
+  }
+  ctx.lineTo(pts[pts.length - 1][0], pts[pts.length - 1][1]);
 }
 
 export default function AnimatedBackground() {
@@ -113,9 +85,28 @@ export default function AnimatedBackground() {
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
+
+      // Additive blending: colours accumulate like real light on black
+      ctx.globalCompositeOperation = "lighter";
+
       for (const wave of WAVES) {
-        drawWave(ctx, wave, w, h, tick);
+        const pts = buildPoints(wave, w, h, tick);
+        const { r, g, b } = wave;
+
+        for (const { lw, a } of LAYERS) {
+          ctx.save();
+          tracePath(ctx, pts);
+          ctx.strokeStyle = `rgba(${r},${g},${b},${a})`;
+          ctx.lineWidth = lw;
+          ctx.lineJoin = "round";
+          ctx.lineCap = "butt";
+          ctx.stroke();
+          ctx.restore();
+        }
       }
+
+      ctx.globalCompositeOperation = "source-over";
+
       tick++;
       animId = requestAnimationFrame(draw);
     };
@@ -130,14 +121,14 @@ export default function AnimatedBackground() {
 
   return (
     <>
-      {/* Canvas: animated aurora waves */}
+      {/* Canvas: fat aurora wave ribbons */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 z-0 pointer-events-none"
         aria-hidden="true"
       />
 
-      {/* Ambient corner glows for depth */}
+      {/* Ambient corner glows */}
       <div
         className="fixed inset-0 z-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
@@ -145,20 +136,20 @@ export default function AnimatedBackground() {
         <div
           className="absolute -bottom-48 -right-48 rounded-full"
           style={{
-            width: 750,
-            height: 750,
+            width: 800,
+            height: 800,
             background:
-              "radial-gradient(circle, rgba(139,0,0,0.22) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(120,0,0,0.22) 0%, transparent 70%)",
             filter: "blur(60px)",
           }}
         />
         <div
           className="absolute -top-36 -left-36 rounded-full"
           style={{
-            width: 600,
-            height: 600,
+            width: 650,
+            height: 650,
             background:
-              "radial-gradient(circle, rgba(220,20,60,0.18) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(200,10,10,0.16) 0%, transparent 70%)",
             filter: "blur(70px)",
           }}
         />
