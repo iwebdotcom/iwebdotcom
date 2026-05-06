@@ -8,15 +8,9 @@
   --red-dark: #8B0000;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+* { box-sizing: border-box; padding: 0; margin: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   background-color: #000000;
@@ -25,92 +19,193 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Light beam animations (upgraide.ai style) ── */
+/* ═══════════════════════════════════════════
+   BEAM KEYFRAMES
+═══════════════════════════════════════════ */
 @keyframes beamSway1 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(-38deg); opacity: 0.80; }
-  33%       { transform: translate(-50%, -50%) rotate(-24deg); opacity: 0.60; }
-  66%       { transform: translate(-50%, -50%) rotate(-42deg); opacity: 0.70; }
+  0%, 100% { transform: translate(-50%, -50%) rotate(-38deg); }
+  33%       { transform: translate(-50%, -50%) rotate(-22deg); }
+  66%       { transform: translate(-50%, -50%) rotate(-44deg); }
 }
 @keyframes beamSway2 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(26deg);  opacity: 0.65; }
-  50%       { transform: translate(-50%, -50%) rotate(12deg);  opacity: 0.45; }
+  0%, 100% { transform: translate(-50%, -50%) rotate(28deg);  }
+  50%       { transform: translate(-50%, -50%) rotate(13deg);  }
 }
 @keyframes beamSway3 {
-  0%, 100% { transform: translate(-50%, -50%) rotate(-10deg); opacity: 0.45; }
-  50%       { transform: translate(-50%, -50%) rotate(-28deg); opacity: 0.30; }
+  0%, 100% { transform: translate(-50%, -50%) rotate(-8deg);  }
+  50%       { transform: translate(-50%, -50%) rotate(-25deg); }
 }
 
-/* ── Marquee ── */
+/* ═══════════════════════════════════════════
+   BEAM CSS CLASSES
+   Two layers per beam: wide glow + bright core
+═══════════════════════════════════════════ */
+.beam {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Beam 1 — main diagonal, top-right → bottom-left */
+.beam-1-glow {
+  width: 260vw;
+  height: 40px;
+  background: linear-gradient(90deg,
+    transparent 5%,
+    rgba(100,0,0,0.5) 20%,
+    rgba(204,0,0,0.9) 40%,
+    rgba(220,20,60,1)  50%,
+    rgba(204,0,0,0.9) 60%,
+    rgba(100,0,0,0.5) 80%,
+    transparent 95%
+  );
+  filter: blur(70px);
+  transform: translate(-50%, -50%) rotate(-38deg);
+  animation: beamSway1 22s ease-in-out infinite;
+}
+.beam-1-core {
+  width: 260vw;
+  height: 4px;
+  background: linear-gradient(90deg,
+    transparent 10%,
+    rgba(220,20,60,0.4) 26%,
+    rgba(255,90,90,1)  44%,
+    rgba(255,90,90,1)  56%,
+    rgba(220,20,60,0.4) 74%,
+    transparent 90%
+  );
+  filter: blur(14px);
+  transform: translate(-50%, -50%) rotate(-38deg);
+  animation: beamSway1 22s ease-in-out infinite;
+}
+
+/* Beam 2 — counter diagonal */
+.beam-2-glow {
+  width: 240vw;
+  height: 30px;
+  background: linear-gradient(90deg,
+    transparent 8%,
+    rgba(100,0,0,0.4) 22%,
+    rgba(190,0,0,0.85) 42%,
+    rgba(204,0,0,0.95) 50%,
+    rgba(190,0,0,0.85) 58%,
+    rgba(100,0,0,0.4) 78%,
+    transparent 92%
+  );
+  filter: blur(85px);
+  transform: translate(-50%, -50%) rotate(28deg);
+  animation: beamSway2 32s ease-in-out infinite;
+}
+.beam-2-core {
+  width: 240vw;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 12%,
+    rgba(220,20,60,0.3) 28%,
+    rgba(255,80,80,0.95) 46%,
+    rgba(255,80,80,0.95) 54%,
+    rgba(220,20,60,0.3) 72%,
+    transparent 88%
+  );
+  filter: blur(12px);
+  transform: translate(-50%, -50%) rotate(28deg);
+  animation: beamSway2 32s ease-in-out infinite;
+}
+
+/* Beam 3 — subtle third */
+.beam-3-glow {
+  width: 220vw;
+  height: 25px;
+  background: linear-gradient(90deg,
+    transparent 10%,
+    rgba(80,0,0,0.35) 25%,
+    rgba(170,0,0,0.75) 44%,
+    rgba(180,0,0,0.80) 50%,
+    rgba(170,0,0,0.75) 56%,
+    rgba(80,0,0,0.35) 75%,
+    transparent 90%
+  );
+  filter: blur(95px);
+  transform: translate(-50%, -50%) rotate(-8deg);
+  animation: beamSway3 28s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════ */
 @keyframes marquee {
   0%   { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
-
 .marquee-track {
   display: flex;
   width: max-content;
   animation: marquee 30s linear infinite;
 }
-.marquee-track:hover {
-  animation-play-state: paused;
-}
+.marquee-track:hover { animation-play-state: paused; }
 
-/* ── Scrollbar ── */
+/* ═══════════════════════════════════════════
+   SCROLLBAR / SELECTION
+═══════════════════════════════════════════ */
 ::-webkit-scrollbar       { width: 6px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #CC0000; border-radius: 3px; }
+::selection { background: rgba(204,0,0,0.3); color: #fff; }
 
-/* ── Selection ── */
-::selection { background: rgba(204, 0, 0, 0.3); color: #fff; }
-
-/* ── Glass card ── */
+/* ═══════════════════════════════════════════
+   GLASS CARD
+═══════════════════════════════════════════ */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 }
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(204, 0, 0, 0.35);
-  box-shadow: 0 0 35px rgba(204, 0, 0, 0.12);
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(204,0,0,0.35);
+  box-shadow: 0 0 35px rgba(204,0,0,0.12);
 }
 
-/* ── Buttons — glass style ── */
+/* ═══════════════════════════════════════════
+   BUTTONS — glassmorphism
+═══════════════════════════════════════════ */
 .btn-red {
-  background: rgba(180, 0, 0, 0.55);
-  border: 1px solid rgba(220, 20, 60, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(160,0,0,0.50);
+  border: 1px solid rgba(220,20,60,0.50);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #fff;
   border-radius: 9999px;
   padding: 0.75rem 2rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 0 18px rgba(204, 0, 0, 0.30), inset 0 1px 0 rgba(255,255,255,0.08);
+  box-shadow: 0 0 20px rgba(204,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.09);
 }
 .btn-red:hover {
-  background: rgba(204, 0, 0, 0.70);
-  box-shadow: 0 0 36px rgba(204, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.12);
+  background: rgba(200,0,0,0.65);
+  box-shadow: 0 0 40px rgba(204,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.13);
   transform: translateY(-1px);
 }
 
 .btn-outline {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: rgba(255,255,255,0.88);
   border-radius: 9999px;
   padding: 0.75rem 2rem;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(204, 0, 0, 0.50);
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(220,20,60,0.55);
   color: #fff;
-  box-shadow: 0 0 20px rgba(204, 0, 0, 0.18);
+  box-shadow: 0 0 22px rgba(204,0,0,0.20);
 }
